@@ -1,31 +1,27 @@
-<div class="temperature-calculator-container" [formGroup]="temperatureFormGroup">
-  <h1>Temperature Calculator</h1>
-  <div class="fahrenheit-row">
-    <div class="f-row-label">
-      <label for="fahrenheit">°F</label>
-    </div>
-    <div class="f-input">
-      <input type="number" id="fahrenheit" formControlName="fahrenheitInput">
-      <div *ngIf="temperatureFormGroup.controls.fahrenheitInput.errors">
-        Input is required
+<div>
+  <div class="temperature-calculator-container" [formGroup]="temperatureFormGroup">
+    <h1>Temperature Calculator</h1>
+    <div class="fahrenheit-row">
+      <div class="f-row-label">
+        <label for="fahrenheit">°F</label>
+      </div>
+      <div class="f-input">
+        <input type="number" id="fahrenheit" formControlName="fahrenheitInput">
+        <div *ngIf="temperatureFormGroup.controls.fahrenheitInput.errors">
+          Input is required
+        </div>
       </div>
     </div>
-    <div class="f-button">
-      <button [disabled]="temperatureFormGroup.controls.fahrenheitInput.invalid" (click)="fahrenheitToCelsius()">to C</button>
-    </div>
-  </div>
-  <div class="celsius-row">
-    <div class="c-row-label">
-      <label for="celsius">°C</label>
-    </div>
-    <div class="c-input">
-      <input type="number" id="celsius" formControlName="celsiusInput">
-      <div *ngIf="temperatureFormGroup.controls.celsiusInput.invalid">
-        Input is required
+    <div class="celsius-row">
+      <div class="c-row-label">
+        <label for="celsius">°C</label>
       </div>
-    </div>
-    <div class="c-button">
-      <button [disabled]="temperatureFormGroup.controls.celsiusInput.invalid" (click)="celsiusToFahrenheit()">to F</button>
+      <div class="c-input">
+        <input type="number" id="celsius" formControlName="celsiusInput">
+        <div *ngIf="temperatureFormGroup.controls.celsiusInput.invalid">
+          Input is required
+        </div>
+      </div>
     </div>
   </div>
 </div>
