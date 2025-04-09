@@ -39,8 +39,8 @@ export class AppComponent implements OnInit, OnDestroy {
         const celsiusCalculatedValue = Number(celsiusValue);
         const fahrenheitCalculatedValue = Math.round(celsiusCalculatedValue * (9 / 5) + 32);
         const celsiusInputRounded = Math.round(celsiusCalculatedValue * 10) / 10;
-        this.temperatureFormGroup.controls.fahrenheitInput.patchValue(fahrenheitCalculatedValue);
-        this.temperatureFormGroup.controls.celsiusInput.patchValue(celsiusInputRounded);
+        this.temperatureFormGroup.patchValue({
+          fahrenheitInput: fahrenheitCalculatedValue, celsiusInput: celsiusInputRounded })
       }));
   }
 
