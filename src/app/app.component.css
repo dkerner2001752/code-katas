@@ -18,22 +18,26 @@
   padding-right: 3rem;
 }
 
-.f-button {
-  padding-left: 1rem;
-}
-
 .celsius-row {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   width: 100%;
+  padding-bottom: 1rem;
 }
 
 .c-row-label {
   padding-right: 3rem;
 }
 
-.c-button {
-  padding-left: 1rem;
+.kelvin-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.k-row-label {
+  padding-right: 3rem;
 }
