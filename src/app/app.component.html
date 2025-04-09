@@ -23,5 +23,16 @@
         </div>
       </div>
     </div>
+    <div class="kelvin-row">
+      <div class="k-row-label">
+        <label for="kelvin">K</label>
+      </div>
+      <div class="k-input">
+        <input type="number" id="kelvin" formControlName="kelvinInput">
+        <div *ngIf="temperatureFormGroup.controls.kelvinInput.invalid">
+          Input is required
+        </div>
+      </div>
+    </div>
   </div>
 </div>
