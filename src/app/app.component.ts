@@ -104,6 +104,41 @@ export class AppComponent implements OnInit, OnDestroy {
     return (num - 273.15)
   }
 
+  absoluteZeroButton() {
+    this.temperatureFormGroup.controls.kelvinInput.setValue('0.00');
+  }
+
+  iceButton() {
+    this.temperatureFormGroup.controls.celsiusInput.setValue('0');
+  }
+
+  niceButton() {
+    this.temperatureFormGroup.controls.fahrenheitInput.setValue('72');
+  }
+
+  hotButton() {
+    this.temperatureFormGroup.controls.fahrenheitInput.setValue('90');
+  }
+
+  boilingButton() {
+    this.temperatureFormGroup.controls.fahrenheitInput.setValue('212');
+  }
+
+  randomButton() {
+    const minFahrenheit = 32;
+    const maxFahrenheit = 100;
+    const randomNumberFahrenheit = Math.floor(Math.random() * (maxFahrenheit - minFahrenheit + 1)) + minFahrenheit;
+
+    const toCelsius = this.fahrenheitToCelsius(randomNumberFahrenheit);
+    const toKelvin = this.celsiusToKelvin(toCelsius);
+
+    this.temperatureFormGroup.patchValue({
+      fahrenheitInput: randomNumberFahrenheit.toString(),
+      celsiusInput: toCelsius.toFixed(1),
+      kelvinInput: toKelvin.toFixed(2)
+    });
+  }
+
   updateCondition(num: string) {
     const fahrenheit = Number(num);
     switch (true) {
