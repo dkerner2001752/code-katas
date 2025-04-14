@@ -37,7 +37,20 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  padding-bottom: 1rem;
 }
 .k-row-label {
+  padding-right: 3rem;
+}
+
+.feels-like-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-bottom: 1rem;
+}
+.feels-like-label {
   padding-right: 3rem;
 }

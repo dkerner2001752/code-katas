@@ -1,5 +1,5 @@
-<div>
-  <div class="temperature-calculator-container" [formGroup]="temperatureFormGroup">
+<div  [formGroup]="temperatureFormGroup">
+  <div class="temperature-calculator-container">
     <h1>Temperature Calculator</h1>
     <div class="fahrenheit-row">
       <div class="f-row-label">
@@ -32,6 +32,14 @@
         <div *ngIf="temperatureFormGroup.controls.kelvinInput.invalid">
           Input is required
         </div>
+      </div>
+    </div>
+    <div class="feels-like-row">
+      <div class="feels-like-label">
+        <label for="feels-like">Feels Like:</label>
+      </div>
+      <div class="feels-like-text" id="feels-like">
+        <div>{{ condition$ | async }}</div>
       </div>
     </div>
   </div>
