@@ -54,3 +54,8 @@
 .feels-like-label {
   padding-right: 3rem;
 }
+
+.buttons-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
