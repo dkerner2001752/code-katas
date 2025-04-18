@@ -42,6 +42,8 @@
         <div>{{ condition$ | async }}</div>
       </div>
     </div>
+    <div class="feels-like-color-container" [style.background-color]="temperatureColor$ | async">
+    </div>
     <div class="buttons-grid">
       <button (click)="absoluteZeroButton()">Absolute Zero</button>
       <button (click)="iceButton()">Ice</button>
