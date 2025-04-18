@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { distinctUntilChanged, map, Observable, startWith, Subscription, tap } from 'rxjs';
+import { distinctUntilChanged, map, Observable, startWith, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -33,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
     })
 });
   public condition$!: Observable<string>;
+  public temperatureColor$!: Observable<string>;
   private subscription: Subscription = new Subscription();
 
   ngOnInit() {
@@ -40,6 +41,10 @@ export class AppComponent implements OnInit, OnDestroy {
       startWith(this.temperatureFormGroup.controls.fahrenheitInput.value),
       map(fahrenheit => this.updateCondition(fahrenheit))
     );
+    this.temperatureColor$ = this.temperatureFormGroup.controls.fahrenheitInput.valueChanges.pipe(
+      startWith(this.temperatureFormGroup.controls.fahrenheitInput.value),
+      map(fahrenheit => this.tempColorChange(fahrenheit))
+    )
     this.subscription.add(this.temperatureFormGroup.controls.fahrenheitInput.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(fahrenheitValue => {
@@ -137,6 +142,20 @@ export class AppComponent implements OnInit, OnDestroy {
       celsiusInput: toCelsius.toFixed(1),
       kelvinInput: toKelvin.toFixed(2)
     });
+  }
+
+  tempColorChange(value: string) {
+    const fahrenheit = Number(value);
+    const minFahrenheit = 32;
+    const maxFahrenheit = 100;
+
+    const tempCalc = (fahrenheit - minFahrenheit) / (maxFahrenheit - minFahrenheit);
+    const tempInRange = Math.max(0, Math.min(1, tempCalc));
+
+    const inverted = 1 - tempInRange;
+    const hue = inverted * 240;
+
+    return `hsl(${ hue }, 100%, 50%)`;
   }
 
   updateCondition(num: string) {
