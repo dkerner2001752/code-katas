@@ -1,7 +1,7 @@
-<div  [formGroup]="temperatureFormGroup">
-  <div class="temperature-calculator-container">
-    <h1>Temperature Calculator</h1>
-    <div class="fahrenheit-row">
+<div [formGroup]="temperatureFormGroup">
+  <h1 class="calculator-header">Temperature Calculator</h1>
+  <div class="calculator-app">
+    <div class="temperature-calculator-container">
       <div class="f-row-label">
         <label for="fahrenheit">°F</label>
       </div>
@@ -11,8 +11,6 @@
           Input is required
         </div>
       </div>
-    </div>
-    <div class="celsius-row">
       <div class="c-row-label">
         <label for="celsius">°C</label>
       </div>
@@ -22,8 +20,6 @@
           Input is required
         </div>
       </div>
-    </div>
-    <div class="kelvin-row">
       <div class="k-row-label">
         <label for="kelvin">K</label>
       </div>
@@ -39,7 +35,7 @@
         <label for="feels-like">Feels Like:</label>
       </div>
       <div class="feels-like-text" id="feels-like">
-        <div>{{ condition$ | async }}</div>
+        <div>{{ weatherCondition$ | async }}</div>
       </div>
     </div>
     <div class="feels-like-color-container" [style.background-color]="temperatureColor$ | async">
@@ -52,5 +48,12 @@
       <button (click)="boilingButton()">Boiling</button>
       <button (click)="randomButton()">Random</button>
     </div>
+    <input #range
+           type="range"
+           min="0"
+           max="108"
+           (input)="sliderUpdate(range.value)"
+           [value]="temperatureFormGroup.controls.fahrenheitInput.value"
+    />
   </div>
 </div>

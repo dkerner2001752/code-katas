@@ -1,70 +1,44 @@
-.temperature-calculator-container {
+.calculator-app {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-content: stretch;
+  gap: 1rem;
+  width: 300px;
+  justify-self: center;
 }
 
-.fahrenheit-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding-bottom: 1rem;
+/* TODO Pick a good width for container, center everything, full width for color bar, NO PADDING */
+
+.calculator-header {
+  text-align: center;
 }
 
-.f-row-label {
-  padding-right: 3rem;
+.temperature-calculator-container {
+  display: grid;
+  grid-template-columns: 0.4fr 1fr;
+  gap: 1rem;
 }
 
-.celsius-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding-bottom: 1rem;
-}
-
-.c-row-label {
-  padding-right: 3rem;
-}
-
+.fahrenheit-row,
+.celsius-row,
 .kelvin-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding-bottom: 1rem;
-}
-.k-row-label {
-  padding-right: 3rem;
+  display: grid;
+  grid-template-columns: subgrid;
 }
 
 .feels-like-row {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  gap: 1rem;
   justify-content: center;
-  width: 100%;
-  padding-bottom: 1rem;
-}
-
-.feels-like-label {
-  padding-right: 3rem;
 }
 
 .feels-like-color-container {
-  align-content: center;
   height: 1rem;
-  width: 15rem;
-  padding-bottom: 1rem;
 }
 
 .buttons-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  padding-top: 1rem;
+  gap: 15px;
 }
+

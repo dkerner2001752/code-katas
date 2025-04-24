@@ -14,128 +14,114 @@ import { distinctUntilChanged, map, Observable, startWith, Subscription } from '
     AsyncPipe
   ]
 })
+
 export class AppComponent implements OnInit, OnDestroy {
   public temperatureFormGroup = new FormGroup({
-    fahrenheitInput: new FormControl<string>('', {
+    fahrenheitInput: new FormControl<string>('32', {
       nonNullable: true,
       validators: [Validators.required],
       updateOn: "blur"
     }),
-    celsiusInput: new FormControl<string>('', {
+    celsiusInput: new FormControl<string>('0.0', {
       nonNullable: true,
       validators: [Validators.required],
       updateOn: "blur"
     }),
-    kelvinInput: new FormControl<string>('', {
+    kelvinInput: new FormControl<string>('273.15', {
       nonNullable: true,
       validators: [Validators.required],
       updateOn: "blur"
     })
-});
-  public condition$!: Observable<string>;
-  public temperatureColor$!: Observable<string>;
-  private subscription: Subscription = new Subscription();
+  });
 
-  ngOnInit() {
-    this.condition$ = this.temperatureFormGroup.controls.fahrenheitInput.valueChanges.pipe(
+  public weatherCondition$!: Observable<string>;
+  public temperatureColor$!: Observable<string>;
+
+  private subscriptions: Subscription = new Subscription();
+
+  public ngOnInit() {
+    this.weatherCondition$ = this.temperatureFormGroup.controls.fahrenheitInput.valueChanges.pipe(
       startWith(this.temperatureFormGroup.controls.fahrenheitInput.value),
       map(fahrenheit => this.updateCondition(fahrenheit))
     );
+
     this.temperatureColor$ = this.temperatureFormGroup.controls.fahrenheitInput.valueChanges.pipe(
       startWith(this.temperatureFormGroup.controls.fahrenheitInput.value),
       map(fahrenheit => this.tempColorChange(fahrenheit))
-    )
-    this.subscription.add(this.temperatureFormGroup.controls.fahrenheitInput.valueChanges.pipe(
-      distinctUntilChanged(),
-    ).subscribe(fahrenheitValue => {
-      const toNumber = Number(fahrenheitValue);
-      const toCelsius = this.fahrenheitToCelsius(toNumber);
-      const toKelvin = this.celsiusToKelvin(toCelsius);
-      this.temperatureFormGroup.patchValue({
-          fahrenheitInput: toNumber.toString(),
-          celsiusInput: toCelsius.toFixed(1),
-          kelvinInput: toKelvin.toFixed(2)
-        })
-     }
-    ));
+    );
 
-    this.subscription.add(this.temperatureFormGroup.controls.celsiusInput.valueChanges.pipe(
-      distinctUntilChanged(),
-    ).subscribe(celsiusValue => {
-      const toNumber = Number(celsiusValue);
-      const toFahrenheit = this.celsiusToFahrenheit(toNumber);
-      const toKelvin = this.celsiusToKelvin(toNumber);
-      this.temperatureFormGroup.patchValue({
-          fahrenheitInput: toFahrenheit.toString(),
-          celsiusInput: toNumber.toFixed(1),
-          kelvinInput: toKelvin.toFixed(2)
-        });
-      }));
+    this.subscriptions.add(this.temperatureFormGroup.controls.fahrenheitInput.valueChanges.pipe(
+      distinctUntilChanged()
+    ).subscribe(fahrenheit => {
+        this.onFahrenheitChange(fahrenheit);
+    }));
 
-    this.subscription.add(this.temperatureFormGroup.controls.kelvinInput.valueChanges.pipe(
-      distinctUntilChanged(),
-      ).subscribe(kelvinValue => {
-        const toNumber = Number(kelvinValue);
-        const toCelsius = this.kelvinToCelsius(toNumber);
-        const toFahrenheit = this.celsiusToFahrenheit(toCelsius);
-        this.temperatureFormGroup.patchValue({
-          fahrenheitInput: toFahrenheit.toString(),
-          celsiusInput: toCelsius.toFixed(1),
-          kelvinInput: toNumber.toFixed(2)
-        })
-      }
-    ));
+    this.subscriptions.add(this.temperatureFormGroup.controls.celsiusInput.valueChanges.pipe(
+      distinctUntilChanged()
+    ).subscribe(celsius => {
+      const toFahrenheit = this.tempCalculations.celsiusToFahrenheit(Number(celsius));
+      this.onFahrenheitChange(toFahrenheit.toString());
+    }));
 
-    this.temperatureFormGroup.controls.fahrenheitInput.setValue('32');
+    this.subscriptions.add(this.temperatureFormGroup.controls.kelvinInput.valueChanges.pipe(
+      distinctUntilChanged()
+    ).subscribe(kelvin => {
+      const toCelsius = this.tempCalculations.kelvinToCelsius(Number(kelvin));
+      const toFahrenheit = this.tempCalculations.celsiusToFahrenheit(toCelsius);
+      this.onFahrenheitChange(toFahrenheit.toString());
+    }));
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+  public sliderUpdate(value: string) {
+    this.temperatureFormGroup.controls.fahrenheitInput.patchValue(value ?? this.temperatureFormGroup.controls.fahrenheitInput.defaultValue);
   }
 
-  fahrenheitToCelsius(num: number) {
-    return Math.round((num - 32) * (5/9) * 10) / 10
+  public ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
-  celsiusToFahrenheit(num: number) {
-    return Math.round(num * (9/5) + 32)
-  }
+  public tempCalculations = {
+    fahrenheitToCelsius: (fahrenheit: number): number => {
+      return Math.round((fahrenheit - 32) * (5 / 9) * 10) / 10;
+    },
+    celsiusToFahrenheit: (celsius: number): number => {
+      return Math.round(celsius * (9 / 5) + 32);
+    },
+    celsiusToKelvin: (celsius: number): number => {
+      return celsius + 273.15;
+    },
+    kelvinToCelsius: (kelvin: number): number => {
+      return kelvin - 273.15;
+    }
+  };
 
-  celsiusToKelvin(num: number) {
-    return (num + 273.15)
-  }
-
-  kelvinToCelsius(num: number) {
-    return (num - 273.15)
-  }
-
-  absoluteZeroButton() {
+  public absoluteZeroButton() {
     this.temperatureFormGroup.controls.kelvinInput.setValue('0.00');
   }
 
-  iceButton() {
+  public iceButton() {
     this.temperatureFormGroup.controls.celsiusInput.setValue('0');
   }
 
-  niceButton() {
+  public niceButton() {
     this.temperatureFormGroup.controls.fahrenheitInput.setValue('72');
   }
 
-  hotButton() {
+  public hotButton() {
     this.temperatureFormGroup.controls.fahrenheitInput.setValue('90');
   }
 
-  boilingButton() {
+  public boilingButton() {
     this.temperatureFormGroup.controls.fahrenheitInput.setValue('212');
   }
 
-  randomButton() {
+  public randomButton() {
     const minFahrenheit = 32;
     const maxFahrenheit = 100;
     const randomNumberFahrenheit = Math.floor(Math.random() * (maxFahrenheit - minFahrenheit + 1)) + minFahrenheit;
 
-    const toCelsius = this.fahrenheitToCelsius(randomNumberFahrenheit);
-    const toKelvin = this.celsiusToKelvin(toCelsius);
+    const toCelsius = this.tempCalculations.fahrenheitToCelsius(randomNumberFahrenheit);
+    const toKelvin = this.tempCalculations.celsiusToKelvin(toCelsius);
 
     this.temperatureFormGroup.patchValue({
       fahrenheitInput: randomNumberFahrenheit.toString(),
@@ -144,7 +130,18 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  tempColorChange(value: string) {
+  private onFahrenheitChange(value: string) {
+    const toNumber = Number(value);
+    const toCelsius = this.tempCalculations.fahrenheitToCelsius(toNumber);
+    const toKelvin = this.tempCalculations.celsiusToKelvin(toCelsius);
+    this.temperatureFormGroup.patchValue({
+      fahrenheitInput: value,
+      celsiusInput: toCelsius.toFixed(1),
+      kelvinInput: toKelvin.toFixed(2)
+    })
+  }
+
+  private tempColorChange(value: string) {
     const fahrenheit = Number(value);
     const minFahrenheit = 32;
     const maxFahrenheit = 100;
@@ -155,10 +152,10 @@ export class AppComponent implements OnInit, OnDestroy {
     const inverted = 1 - tempInRange;
     const hue = inverted * 240;
 
-    return `hsl(${ hue }, 100%, 50%)`;
+    return `hsl(${hue}, 100%, 50%)`;
   }
 
-  updateCondition(num: string) {
+  private updateCondition(num: string) {
     const fahrenheit = Number(num);
     switch (true) {
       case fahrenheit > 212:
